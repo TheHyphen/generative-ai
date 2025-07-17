@@ -10,11 +10,12 @@ key = os.getenv("OPENAI_API_KEY")
 def main():
     prompt = input("Enter the prompt: ")
     client = OpenAI(api_key=key)
-    r = client.chat.completions.create(
-        model="gpt-4.1",
-        messages=[{"role": "user", "content": prompt}],
+    r = client.responses.create(
+        model="gpt-4o",
+        input=prompt,
+        instructions="Use a lot of emojis in your responses",
     )
-    print(r.choices[0].message.content)
+    print(r.output_text)
 
 
 if __name__ == "__main__":
