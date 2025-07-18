@@ -1,5 +1,6 @@
 import json
 import os
+import uuid
 
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -36,7 +37,8 @@ def main():
     choose_existing = input("Choose an existing chat? Y/n")
     if choose_existing == "Y":
         chat_id, history = retrieve_chat()
-
+    else:
+        chat_id = str(uuid.uuid4())
     while True:
         prompt = input("User: ")
         if prompt == "exit":
@@ -45,10 +47,14 @@ def main():
         r = client.responses.create(
             model="gpt-4o",
             input=history,
-            instructions="Use a lot of emojis in your responses",
+            instructions="You are a natural language to JSON parser to help with currency conversion. When you receive an input, convert it into JSON with the following properties: 'from' (3 letter currency code), 'to' (3 letter currency code) and the amount which is the amount. Do not use markdown formatting.",
         )
         print(f"Assistant: {r.output_text}")
         history.append({"role": "assistant", "content": r.output_text})
+
+        output = json.loads(r.output_text)
+        print(f"From: {output['from']}, To: {output['to']}, Amount: {output['amount']}")
+        print(f"Converted: {output['amount'] * 100}")
 
     save_chat(chat_id, history)
 

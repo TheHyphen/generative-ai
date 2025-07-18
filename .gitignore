@@ -10,3 +10,4 @@ wheels/
 .venv
 .env
 chats/*.json
+inputs/*.txt
