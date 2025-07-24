@@ -1,4 +1,5 @@
 import base64
+import datetime
 import os
 
 from cv2 import VideoCapture, imwrite
@@ -16,7 +17,9 @@ def capture_img():
     imwrite("captured/captured_image.png", frame)
     cam.release()
 
-    return "captured/captured_image.png"
+    now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+    return f"captured/{now}_captured_image.png"
 
 
 def convert_to_b64(path):
