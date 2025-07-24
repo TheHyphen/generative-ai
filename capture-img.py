@@ -14,12 +14,13 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def capture_img():
     cam = VideoCapture(0)
     ret, frame = cam.read()
-    imwrite("captured/captured_image.png", frame)
-    cam.release()
 
     now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    img_path = f"captured/{now}_captured_image.png"
+    imwrite(img_path, frame)
+    cam.release()
 
-    return f"captured/{now}_captured_image.png"
+    return img_path
 
 
 def convert_to_b64(path):
