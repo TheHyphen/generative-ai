@@ -10,3 +10,5 @@ wheels/
 .venv
 .env
 chats/*.json
+generated/*.png
+captured/*.png
