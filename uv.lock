@@ -417,6 +417,7 @@ dependencies = [
     { name = "openai" },
     { name = "opencv-python" },
     { name = "pandas" },
+    { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "requests" },
 ]
@@ -426,6 +427,7 @@ requires-dist = [
     { name = "openai", specifier = ">=1.95.1" },
     { name = "opencv-python", specifier = ">=4.12.0.88" },
     { name = "pandas", specifier = ">=2.3.1" },
+    { name = "pydantic", specifier = ">=2.11.7" },
     { name = "python-dotenv", specifier = ">=1.1.1" },
     { name = "requests", specifier = ">=2.32.4" },
 ]
