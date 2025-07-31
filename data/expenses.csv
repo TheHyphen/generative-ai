@@ -8,3 +8,12 @@ amount,description,category,date,type
 123,doctor visit,medicine,2025-07-25,expense
 8000,trip to Wonderla,entertainment,2025-07-23,expense
 100000,salary,other,2025-07-01,income
+5000,shoes,shopping,2025-07-31,expense
+2.97,Hand Towel,shopping,2025-07-31,expense
+100,eggs,food,2025-07-31,expense
+300,oil,other,2025-07-31,expense
+500,haircut,other,2025-07-31,expense
+2.97,HAND TOWEL,shopping,2025-07-31,expense
+2.0,GATORADE,food,2025-07-31,expense
+16.88,T-SHIRT,shopping,2025-07-31,expense
+1.24,PUSH PINS,shopping,2025-07-31,expense

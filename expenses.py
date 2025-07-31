@@ -2,6 +2,7 @@ import csv
 import datetime
 import json
 import os
+import base64
 
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -64,6 +65,13 @@ def get_total_by_date(args):
         )
     return str(total)
 
+# read image as base64 string
+def read_image(args):
+    img_path = args["path"]
+    with open(img_path, "rb") as img_file:
+        img_data = base64.b64encode(img_file.read()).decode("utf-8")
+
+    return parse_image(img_data)
 
 tools = [
     {
@@ -153,18 +161,52 @@ tools = [
             "additionalProperties": False,
         },
     },
+    {
+        "type": "function",
+        "name": "read_image",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "The path to the image file",
+                },
+            },
+            "required": ["path"],
+            "additionalProperties": False,
+        },
+    },
 ]
 
 fns = {
     "add_row": add_row,
     "get_total_by_category": get_total_by_category,
     "get_total_by_date": get_total_by_date,
+    "read_image": read_image,
 }
 
 load_dotenv()
 key = os.getenv("OPENAI_API_KEY")
 
 client = OpenAI(api_key=key)
+
+def parse_image(image_data):
+    response = client.responses.create(
+        model="gpt-4.1-mini",
+        input=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "input_image",
+                        "image_url": f"data:image/png;base64,{image_data}"
+                    }
+                ]
+            }
+        ],
+        instructions="Extract all the text from the image, focus on the expenses in the image."
+    )
+    return response.output_text
 
 history = []
 while True:
@@ -181,44 +223,44 @@ while True:
         model="gpt-4.1-mini",
     )
 
-    output = response.output[0]
+    for output in response.output:
 
-    if output.type == "message":
-        print(f"Assistant: {output.content[0].text}")
-        history.append({"role": "assistant", "content": output.content[0].text})
+        if output.type == "message":
+            print(f"Assistant: {output.content[0].text}")
+            history.append({"role": "assistant", "content": output.content[0].text})
 
-    elif output.type == "function_call":
-        history.append(output)
+        elif output.type == "function_call":
+            history.append(output)
 
-        function_name = output.name
-        function_args = json.loads(output.arguments)
+            function_name = output.name
+            function_args = json.loads(output.arguments)
 
-        fn = fns[function_name]
-        result = fn(function_args)
-        if not result:
+            fn = fns[function_name]
+            result = fn(function_args)
+            if not result:
+                history.append(
+                    {
+                        "type": "function_call_output",
+                        "call_id": output.call_id,
+                        "output": "success",
+                    }
+                )
+            else:
+                history.append(
+                    {
+                        "type": "function_call_output",
+                        "call_id": output.call_id,
+                        "output": result,
+                    }
+                )
+
+            tool_call_response = client.responses.create(
+                input=history, model="gpt-4.1-mini"
+            )
+            print(f"Assistant: {tool_call_response.output[0].content[0].text}")
             history.append(
                 {
-                    "type": "function_call_output",
-                    "call_id": output.call_id,
-                    "output": "success",
+                    "role": "assistant",
+                    "content": tool_call_response.output[0].content[0].text,
                 }
             )
-        else:
-            history.append(
-                {
-                    "type": "function_call_output",
-                    "call_id": output.call_id,
-                    "output": result,
-                }
-            )
-
-        tool_call_response = client.responses.create(
-            input=history, model="gpt-4.1-mini"
-        )
-        print(f"Assistant: {tool_call_response.output[0].content[0].text}")
-        history.append(
-            {
-                "role": "assistant",
-                "content": tool_call_response.output[0].content[0].text,
-            }
-        )
