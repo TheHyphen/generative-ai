@@ -17,3 +17,10 @@ amount,description,category,date,type
 2.0,GATORADE,food,2025-07-31,expense
 16.88,T-SHIRT,shopping,2025-07-31,expense
 1.24,PUSH PINS,shopping,2025-07-31,expense
+500.0,Food,Food,2025-08-01,Expense
+800.0,Medicine,medicine,2025-08-01,expense
+500.0,park,entertainment,2025-08-01,expense
+2.97,Hand Towel,shopping,2025-08-01,credit
+2.0,Gatorade,food,2025-08-01,credit
+16.88,T-shirt,shopping,2025-08-01,credit
+1.24,Push Pins,shopping,2025-08-01,credit
