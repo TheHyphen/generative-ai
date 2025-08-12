@@ -23,4 +23,4 @@ results = index.query(
     top_k=3,
     include_metadata=True,
 )
-print(results.matches[0].metadata["text"])
+print(results.matches[0])
