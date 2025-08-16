@@ -5,6 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "datasets>=4.0.0",
+    "evaluate>=0.4.5",
     "numpy>=2.2.6",
     "openai>=1.95.1",
     "openai-agents>=0.2.0",
@@ -16,5 +18,8 @@ dependencies = [
     "python-dotenv>=1.1.1",
     "requests>=2.32.4",
     "scipy>=1.16.1",
+    "together>=1.5.25",
+    "tqdm>=4.67.1",
+    "transformers>=4.55.2",
     "yt-dlp>=2025.7.21",
 ]
